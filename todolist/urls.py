@@ -20,7 +20,7 @@ from rest_framework.authentication import BasicAuthentication
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('todo.urls')),    
+    path('', include('todo.urls')),    
 ]
 
 rest_framework_default_authentication_classes = [
