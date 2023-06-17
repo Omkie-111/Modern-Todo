@@ -4,18 +4,28 @@ from .models import TodoItem
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class TodoItemSerializer(serializers.ModelSerializer):
+    """
+    Serializer for all todo functionalities
+    """
 
     class Meta:
         model = TodoItem
         fields = '__all__'
-    
+
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User model
+    """
+
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
-
 class UserCreateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for creating User model
+    """
+
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -30,8 +40,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         )
         return user
 
-
 class TokenObtainPairSerializer(serializers.Serializer):
+    """
+    Serializer for obtaining token pair for authentication
+    """
+
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
@@ -52,4 +65,3 @@ class TokenObtainPairSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Invalid credentials')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
-
