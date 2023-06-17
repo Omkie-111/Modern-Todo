@@ -1,26 +1,43 @@
 from rest_framework import generics
 from .models import TodoItem
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-from .serializers import TodoItemSerializer,UserSerializer
+from django.contrib.auth import authenticate, login, logout
+from .serializers import TodoItemSerializer, UserCreateSerializer, TokenObtainPairSerializer
 
 class UserCreateAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
 
-class UserLoginAPIView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+
+class UserLoginAPIView(generics.GenericAPIView):
+    serializer_class = TokenObtainPairSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = authenticate(
+            request, 
+            username=serializer.validated_data['username'], 
+            password=serializer.validated_data['password']
+        )
+        login(request, user)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class UserLogoutAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
+        logout(request)
+        return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+
 
 class ListTodo(generics.ListAPIView):
     """API Class to read all the todo items"""
