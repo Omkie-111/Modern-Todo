@@ -22,7 +22,6 @@ class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
 
-
 class UserLoginAPIView(generics.GenericAPIView):
     """
     API Class to login user
@@ -37,12 +36,16 @@ class UserLoginAPIView(generics.GenericAPIView):
 
         user = authenticate(
             request,
-            username=serializer.validated_data['username'],
-            password=serializer.validated_data['password']
+            username=request.data.get('username'),
+            password=request.data.get('password')
         )
-        login(request, user)
 
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        if user is not None:
+            login(request, user)
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class UserLogoutAPIView(generics.GenericAPIView):
