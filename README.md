@@ -10,16 +10,11 @@ This is a simple To-Do List application built using Django and Django Rest Frame
 
 ## Installation
 
-1. Clone the repository:
-  git clone <repository-url>
+1. Clone the repository: git clone https://github.com/Omkie-111/AlgoBulls-Todo.git
 
-2. Change into the project directory:
+2. Change into the project directory: cd todolist
   
-cd todolist
-  
-3. Create a virtual environment:
- 
-python -m venv venv
+3. Create a virtual environment: python -m venv venv
   
 4. Activate the virtual environment:
 
@@ -35,17 +30,11 @@ python -m venv venv
   venv\Scripts\activate
   ```
 
-5. Install the dependencies:
-
-pip install -r requirements.txt
+5. Install the dependencies: pip install -r requirements.txt
   
-6. Apply the database migrations:
-
-python manage.py migrate
+6. Apply the database migrations: python manage.py migrate
   
-7. Run the development server:
-
-python manage.py runserver
+7. Run the development server: python manage.py runserver
   
 The app will be accessible at `http://localhost:8000/`.
 
