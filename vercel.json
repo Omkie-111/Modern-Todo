@@ -1,24 +1,23 @@
 {
   "version": 2,
+  "name": "todo",
   "builds": [
     {
       "src": "todolist/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.10.1" }
+      "use": "@ardnt/now-python-wsgi",
+      "config": {
+        "maxLambdaSize": "30mb"
+      }
     },
     {
       "src": "build_files.sh",
-      "use": "@vercel/static-build",
+      "use": "@vercel/static",
       "config": {
-        "distDir": "staticfiles_build"
+        "distDir": "static"
       }
     }
   ],
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "todolist/wsgi.py"
