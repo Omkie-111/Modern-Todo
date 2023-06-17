@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -48,16 +49,19 @@ class UserLoginAPIView(generics.GenericAPIView):
 
 
 
-class UserLogoutAPIView(generics.GenericAPIView):
+class UserLogoutAPIView(APIView):
     """
     API Class to logout user
     """
 
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         logout(request)
-        return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+        response_data = {
+            'detail': 'Successfully logged out.'
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 class ListTodo(generics.ListAPIView):
