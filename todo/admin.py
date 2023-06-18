@@ -3,6 +3,7 @@ from .models import TodoItem
 
 
 class TodoItemAdmin(admin.ModelAdmin):
+    readonly_fields = ['timestamp']
     fieldsets = (
         ('General Information', {
             'fields': ('title', 'description', 'status')

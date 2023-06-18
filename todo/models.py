@@ -18,8 +18,4 @@ class TodoItem(models.Model):
     def __str__(self):
         return self.title  # Return the title as the string representation of the todo item
     
-    def save(self, *args, **kwargs):
-        if self.pk:  # Check if it's an existing entry
-            raise ValueError("Cannot edit the timestamp field.")  # Prevent editing the timestamp field
-        super().save(*args, **kwargs)  # Call the save method of the superclass
 

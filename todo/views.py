@@ -13,7 +13,6 @@ from .serializers import (
     TokenObtainPairSerializer
 )
 
-
 class UserCreateAPIView(generics.CreateAPIView):
     """
     API Class to create todo list user
@@ -22,6 +21,7 @@ class UserCreateAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
+
 
 class UserLoginAPIView(generics.GenericAPIView):
     """
@@ -48,7 +48,6 @@ class UserLoginAPIView(generics.GenericAPIView):
             return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-
 class UserLogoutAPIView(APIView):
     """
     API Class to logout user
@@ -69,7 +68,7 @@ class ListTodo(generics.ListAPIView):
     API Class to read all the todo items
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
 
@@ -79,19 +78,26 @@ class DetailTodo(generics.RetrieveAPIView):
     API Class to read one specific todo item
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
 
 
 class CreateTodo(generics.CreateAPIView):
     """
-    API Class to create the todo items
+    API Class to create a todo item
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class UpdateTodo(generics.RetrieveUpdateAPIView):
@@ -99,7 +105,7 @@ class UpdateTodo(generics.RetrieveUpdateAPIView):
     API Class to update todo items
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
 
@@ -109,6 +115,6 @@ class DeleteTodo(generics.DestroyAPIView):
     API Class to delete the todo items
     """
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = TodoItem.objects.all()
     serializer_class = TodoItemSerializer
